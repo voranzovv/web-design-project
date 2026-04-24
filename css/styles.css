@@ -1,13 +1,4 @@
 /* css custom variables for colors and fonts */
-/* :root {
-  --color-bg: #0d0d1a;
-  --color-bg-secondary: #13132b;
-  --color-accent: #a259ff;
-  --color-accent-2: #ff6ec7;
-  --color-text: #f0eeff;
-  --color-text-muted: #8b85b0;
-  --font-main: "Segoe UI", Arial, sans-serif;
-} */
 
 :root {
   /* Backgrounds */
@@ -55,6 +46,9 @@ body {
   font-size: 16px;
   line-height: 1.6;
   animation: bgShift 12s ease infinite alternate;
+  /* overflow-x hidden so floating notes don't cause scroll */
+  overflow-x: hidden;
+  position: relative;
 }
 
 img {
@@ -75,6 +69,88 @@ a:hover {
   text-decoration: underline;
 }
 
+/* ================================
+   FLOATING MUSIC NOTES (background)
+   ================================ */
+
+.music-notes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.note {
+  position: absolute;
+  bottom: -60px;
+  font-size: 24px;
+  color: var(--color-accent);
+  opacity: 0;
+  animation: floatNote 8s ease-in infinite;
+}
+
+/* Spread notes across the screen with different timings */
+.note:nth-child(1) {
+  left: 8%;
+  animation-delay: 0s;
+  animation-duration: 7s;
+  font-size: 20px;
+}
+.note:nth-child(2) {
+  left: 20%;
+  animation-delay: 1.5s;
+  animation-duration: 9s;
+  font-size: 28px;
+}
+.note:nth-child(3) {
+  left: 35%;
+  animation-delay: 3s;
+  animation-duration: 6s;
+  font-size: 18px;
+}
+.note:nth-child(4) {
+  left: 50%;
+  animation-delay: 0.8s;
+  animation-duration: 10s;
+  font-size: 30px;
+}
+.note:nth-child(5) {
+  left: 63%;
+  animation-delay: 2.2s;
+  animation-duration: 8s;
+  font-size: 22px;
+}
+.note:nth-child(6) {
+  left: 75%;
+  animation-delay: 4s;
+  animation-duration: 7s;
+  font-size: 26px;
+}
+.note:nth-child(7) {
+  left: 87%;
+  animation-delay: 1s;
+  animation-duration: 9s;
+  font-size: 20px;
+}
+.note:nth-child(8) {
+  left: 95%;
+  animation-delay: 3.5s;
+  animation-duration: 6s;
+  font-size: 16px;
+}
+
+/* Ensure all content sits ABOVE the notes layer */
+header,
+main,
+footer {
+  position: relative;
+  z-index: 1;
+}
+
 /* skip link */
 .skip-link {
   position: absolute;
@@ -86,6 +162,7 @@ a:hover {
   border-radius: 4px;
   font-size: 14px;
   transition: top 0.2s;
+  z-index: 100;
 }
 
 .skip-link:focus {
@@ -122,12 +199,17 @@ nav ul {
 nav ul a {
   color: var(--color-text-muted);
   font-size: 14px;
-  transition: color 0.2s;
+  transition:
+    color 0.2s,
+    transform 0.2s;
+  display: inline-block;
 }
 
 nav ul a:hover {
   color: var(--color-text);
   text-decoration: none;
+  /* Subtle nav link wiggle on hover */
+  animation: wiggle 0.4s ease;
 }
 
 /* main content */
@@ -168,6 +250,7 @@ footer {
   padding: 1.5rem;
   border: 1px solid var(--color-accent);
   animation: fadeSlideIn 0.8s ease both;
+  transition: box-shadow 0.4s ease;
 }
 
 .album-art {
@@ -176,7 +259,10 @@ footer {
   border-radius: 8px;
   object-fit: cover;
   flex-shrink: 0;
-  transition: opacity 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    border-radius 0.4s ease;
 }
 
 .player-info {
@@ -213,16 +299,21 @@ footer {
   border-radius: 4px;
   transition: width 0.3s ease;
 }
+
+/* ================================
+   PLAYING STATE ANIMATIONS
+   ================================ */
+
 .playing {
-  box-shadow: 0 0 20px rgba(29, 185, 84, 0.3);
-}
-.playing .album-art {
-  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(29, 185, 84, 0.4);
 }
 
-/* .playing .progress-bar {
-  animation: progressFill 180s linear forwards;
-} */
+/* Album art spins slowly like a vinyl record when playing */
+.playing .album-art {
+  transform: scale(1.05);
+  border-radius: 50%;
+  animation: spinVinyl 8s linear infinite;
+}
 
 /* --- Controls --- */
 .player-controls {
@@ -243,12 +334,18 @@ footer {
   transition:
     background-color 0.2s,
     transform 0.2s;
+  position: relative;
 }
 
 .ctrl-btn:hover {
   background-color: var(--color-accent);
   color: #fff;
   transform: scale(1.1);
+}
+
+/* Click burst: button pops when clicked */
+.ctrl-btn:active {
+  animation: btnPop 0.25s ease;
 }
 
 .play-btn {
@@ -260,6 +357,20 @@ footer {
 .ctrl-btn:focus {
   outline: 2px solid var(--color-accent-2);
   outline-offset: 2px;
+}
+
+/* Pulse ring around play button when music is playing */
+.play-btn.pulsing::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  animation: pulseRing 1.2s ease-out infinite;
 }
 
 /* visualization */
@@ -281,65 +392,110 @@ footer {
   transform-origin: bottom;
 }
 
+/* Bars pulse color when active */
+.visualizer.active .bar {
+  animation: colorPulse 2s ease infinite alternate;
+}
+
 .visualizer.active .bar:nth-child(1) {
-  animation: bounce 0.7s 0s ease infinite alternate;
+  animation:
+    bounce 0.7s 0s ease infinite alternate,
+    colorPulse 2s 0s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(2) {
-  animation: bounce 0.8s 0.05s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.05s ease infinite alternate,
+    colorPulse 2s 0.1s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(3) {
-  animation: bounce 0.8s 0.3s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.3s ease infinite alternate,
+    colorPulse 2s 0.2s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(4) {
-  animation: bounce 0.8s 0.15s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.15s ease infinite alternate,
+    colorPulse 2s 0.3s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(5) {
-  animation: bounce 0.8s 0.2s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.2s ease infinite alternate,
+    colorPulse 2s 0.4s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(6) {
-  animation: bounce 0.8s 0.25s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.25s ease infinite alternate,
+    colorPulse 2s 0.5s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(7) {
-  animation: bounce 0.8s 0.3s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.3s ease infinite alternate,
+    colorPulse 2s 0.4s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(8) {
-  animation: bounce 0.8s 0.35s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.35s ease infinite alternate,
+    colorPulse 2s 0.3s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(9) {
-  animation: bounce 0.8s 0.4s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.4s ease infinite alternate,
+    colorPulse 2s 0.2s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(10) {
-  animation: bounce 0.8s 0.45s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.45s ease infinite alternate,
+    colorPulse 2s 0.1s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(11) {
-  animation: bounce 0.8s 0.5s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.5s ease infinite alternate,
+    colorPulse 2s 0s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(12) {
-  animation: bounce 0.8s 0.45s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.45s ease infinite alternate,
+    colorPulse 2s 0.1s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(13) {
-  animation: bounce 0.8s 0.4s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.4s ease infinite alternate,
+    colorPulse 2s 0.2s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(14) {
-  animation: bounce 0.8s 0.35s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.35s ease infinite alternate,
+    colorPulse 2s 0.3s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(15) {
-  animation: bounce 0.8s 0.3s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.3s ease infinite alternate,
+    colorPulse 2s 0.4s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(16) {
-  animation: bounce 0.8s 0.25s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.25s ease infinite alternate,
+    colorPulse 2s 0.5s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(17) {
-  animation: bounce 0.8s 0.2s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.2s ease infinite alternate,
+    colorPulse 2s 0.4s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(18) {
-  animation: bounce 0.8s 0.15s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.15s ease infinite alternate,
+    colorPulse 2s 0.3s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(19) {
-  animation: bounce 0.8s 0.1s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.1s ease infinite alternate,
+    colorPulse 2s 0.2s ease infinite alternate;
 }
 .visualizer.active .bar:nth-child(20) {
-  animation: bounce 0.8s 0.05s ease infinite alternate;
+  animation:
+    bounce 0.8s 0.05s ease infinite alternate,
+    colorPulse 2s 0.1s ease infinite alternate;
 }
 
 /* ================================
@@ -352,6 +508,7 @@ footer {
   gap: 4px;
 }
 
+/* Stagger each track row sliding in on page load */
 .track-row {
   display: flex;
   align-items: center;
@@ -364,6 +521,23 @@ footer {
     background-color 0.2s ease,
     border-color 0.2s ease;
   cursor: pointer;
+  animation: slideInRow 0.5s ease both;
+}
+
+.track-row:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.track-row:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.track-row:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.track-row:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.track-row:nth-child(5) {
+  animation-delay: 0.5s;
 }
 
 .track-row:hover {
@@ -371,17 +545,15 @@ footer {
   background-color: var(--color-bg-secondary);
   border-color: var(--color-accent);
 }
+
 .track-row.active {
   background-color: var(--color-bg-tertiary);
   border-color: var(--color-accent);
 }
+
 .track-row.active .track-row-title {
   color: var(--color-accent);
 }
-/* .track-row:focus {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-} */
 
 .track-num {
   font-size: 13px;
@@ -396,6 +568,11 @@ footer {
   border-radius: 4px;
   object-fit: cover;
   flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.track-row:hover .track-thumb {
+  transform: scale(1.1);
 }
 
 .track-details {
@@ -510,7 +687,12 @@ footer {
   white-space: nowrap;
   border: 0;
 }
-/* keyframes  */
+
+/* ================================
+   KEYFRAMES
+   ================================ */
+
+/* Page load fade in */
 @keyframes fadeSlideIn {
   from {
     opacity: 0;
@@ -522,6 +704,7 @@ footer {
   }
 }
 
+/* Visualizer bar bounce */
 @keyframes bounce {
   from {
     height: 5px;
@@ -531,22 +714,39 @@ footer {
   }
 }
 
-/* bg animation  */
+/* Visualizer bar color shift when playing */
+@keyframes colorPulse {
+  0% {
+    background-color: #1db954;
+  }
+  50% {
+    background-color: #17a045;
+  }
+  100% {
+    background-color: #1ed760;
+  }
+}
+
+/* Background color shift — now uses more visible colours */
 @keyframes bgShift {
   0% {
     background-color: #0d0d1a;
   }
-  33% {
+  25% {
     background-color: #0d1a2a;
   }
-  66% {
+  50% {
     background-color: #1a0d2a;
   }
+  75% {
+    background-color: #0d2a1a;
+  }
   100% {
-    background-color: #0d1a1a;
+    background-color: #1a1a0d;
   }
 }
 
+/* Submit button paper airplane */
 @keyframes flyAcross {
   0% {
     left: -30px;
@@ -557,6 +757,87 @@ footer {
   }
   100% {
     left: 110%;
+    opacity: 0;
+  }
+}
+
+/* Album art vinyl spin when playing */
+@keyframes spinVinyl {
+  from {
+    transform: scale(1.05) rotate(0deg);
+  }
+  to {
+    transform: scale(1.05) rotate(360deg);
+  }
+}
+
+/* Pulse ring on play button */
+@keyframes pulseRing {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Button click pop */
+@keyframes btnPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.88);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Track row slide in on load */
+@keyframes slideInRow {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Nav link wiggle on hover */
+@keyframes wiggle {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Floating music notes float upward */
+@keyframes floatNote {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(20deg);
     opacity: 0;
   }
 }
