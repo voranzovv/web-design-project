@@ -5,6 +5,7 @@ const trackTitle = document.querySelector(".track-title");
 const trackArtist = document.querySelector(".track-artist");
 const albumArt = document.getElementById("album-art");
 const progressBar = document.querySelector(".progress-bar");
+const progressWrapper = document.querySelector(".progress-bar-wrapper");
 
 const songs = [
   {
@@ -44,7 +45,35 @@ let currentSong = songs[currentIndex];
 const audio = new Audio(currentSong.audioSrc);
 let isPlaying = false;
 
-// UPDATE UI
+/* --------------------------------
+   RIPPLE EFFECT HELPER
+   Spawns a CSS ripple on any button click
+   -------------------------------- */
+function spawnRipple(btn, event) {
+  var ripple = document.createElement("span");
+  ripple.classList.add("ripple");
+
+  var rect = btn.getBoundingClientRect();
+  var size = Math.max(rect.width, rect.height);
+  var x = event.clientX - rect.left - size / 2;
+  var y = event.clientY - rect.top - size / 2;
+
+  ripple.style.width = size + "px";
+  ripple.style.height = size + "px";
+  ripple.style.left = x + "px";
+  ripple.style.top = y + "px";
+
+  btn.appendChild(ripple);
+
+  /* Remove after animation */
+  setTimeout(function () {
+    ripple.remove();
+  }, 600);
+}
+
+/* --------------------------------
+   UPDATE UI — play/pause state
+   -------------------------------- */
 function updatePlayerUI() {
   if (isPlaying) {
     audio.play();
@@ -52,7 +81,7 @@ function updatePlayerUI() {
     visualizer.classList.add("active");
     playBtn.innerHTML = "&#9646;&#9646;";
     playBtn.setAttribute("aria-label", "Pause");
-    // Add pulsing ring to play button
+    /* Dual pulse rings */
     playBtn.classList.add("pulsing");
   } else {
     audio.pause();
@@ -60,12 +89,13 @@ function updatePlayerUI() {
     visualizer.classList.remove("active");
     playBtn.innerHTML = "&#9654;";
     playBtn.setAttribute("aria-label", "Play");
-    // Remove pulsing ring
     playBtn.classList.remove("pulsing");
   }
 }
 
-// SET SONG
+/* --------------------------------
+   SET SONG
+   -------------------------------- */
 function setCurrentSong(index) {
   document.querySelectorAll(".track-row").forEach(function (row) {
     row.classList.remove("active");
@@ -75,8 +105,10 @@ function setCurrentSong(index) {
   currentIndex = index;
   currentSong = songs[currentIndex];
 
+  /* Fade album art during swap */
   albumArt.style.opacity = "0";
   setTimeout(function () {
+    albumArt.src = currentSong.albumArt;
     albumArt.style.opacity = "1";
   }, 400);
 
@@ -86,8 +118,8 @@ function setCurrentSong(index) {
 
   trackTitle.textContent = currentSong.title;
   trackArtist.textContent = currentSong.artist;
-  albumArt.src = currentSong.albumArt;
   progressBar.style.width = "0%";
+  progressWrapper.classList.remove("progress-active");
 
   if (isPlaying) {
     audio.play();
@@ -96,49 +128,50 @@ function setCurrentSong(index) {
   updatePlayerUI();
 }
 
-// PLAY / PAUSE BUTTON
-playBtn.addEventListener("click", function () {
+/* --------------------------------
+   PLAY / PAUSE BUTTON
+   -------------------------------- */
+playBtn.addEventListener("click", function (e) {
+  spawnRipple(playBtn, e);
   isPlaying = !isPlaying;
   updatePlayerUI();
 });
 
-// PROGRESS BAR
+/* --------------------------------
+   PROGRESS BAR — show glowing dot
+   -------------------------------- */
 audio.addEventListener("timeupdate", function () {
   if (audio.duration) {
     var percent = (audio.currentTime / audio.duration) * 100;
     progressBar.style.width = percent + "%";
+    /* Show glowing dot once bar has moved */
+    if (percent > 1) {
+      progressWrapper.classList.add("progress-active");
+    }
   }
 });
 
-// AUTO NEXT SONG
+/* --------------------------------
+   AUTO NEXT SONG
+   -------------------------------- */
 audio.addEventListener("ended", function () {
   var nextIndex = (currentIndex + 1) % songs.length;
   setCurrentSong(nextIndex);
 });
 
-// INITIAL SONG
+/* --------------------------------
+   INITIAL LOAD
+   -------------------------------- */
 setCurrentSong(0);
 
-// SUBMIT BUTTON ANIMATION
-function handleSubmit() {
-  var submitBtn = document.getElementById("submit-btn");
-  var btnLabel = submitBtn.querySelector(".btn-label");
-
-  submitBtn.classList.add("submitted");
-  submitBtn.disabled = true;
-
-  setTimeout(function () {
-    btnLabel.textContent = "Sent!";
-    submitBtn.classList.remove("submitted");
-    btnLabel.style.opacity = "1";
-  }, 900);
-}
-
-// PREV / NEXT BUTTONS
+/* --------------------------------
+   PREV / NEXT BUTTONS + ripple
+   -------------------------------- */
 var prevBtn = document.querySelector('[aria-label="Previous track"]');
 var nextBtn = document.querySelector('[aria-label="Next track"]');
 
-prevBtn.addEventListener("click", function () {
+prevBtn.addEventListener("click", function (e) {
+  spawnRipple(prevBtn, e);
   var index = currentIndex - 1;
   if (index < 0) {
     index = songs.length - 1;
@@ -148,14 +181,17 @@ prevBtn.addEventListener("click", function () {
   updatePlayerUI();
 });
 
-nextBtn.addEventListener("click", function () {
+nextBtn.addEventListener("click", function (e) {
+  spawnRipple(nextBtn, e);
   var index = (currentIndex + 1) % songs.length;
   setCurrentSong(index);
   isPlaying = true;
   updatePlayerUI();
 });
 
-// Make track rows keyboard accessible
+/* --------------------------------
+   TRACK ROW CLICKS — keyboard + mouse
+   -------------------------------- */
 document.querySelectorAll(".track-row").forEach(function (row, index) {
   row.setAttribute("tabindex", "0");
   row.setAttribute("role", "button");
@@ -177,7 +213,23 @@ document.querySelectorAll(".track-row").forEach(function (row, index) {
   });
 });
 
-// Subscribe form submit
+/* --------------------------------
+   SUBSCRIBE FORM — paper airplane
+   -------------------------------- */
+function handleSubmit() {
+  var submitBtn = document.getElementById("submit-btn");
+  var btnLabel = submitBtn.querySelector(".btn-label");
+
+  submitBtn.classList.add("submitted");
+  submitBtn.disabled = true;
+
+  setTimeout(function () {
+    btnLabel.textContent = "Sent!";
+    submitBtn.classList.remove("submitted");
+    btnLabel.style.opacity = "1";
+  }, 900);
+}
+
 document
   .getElementById("subscribe-form")
   .addEventListener("submit", function (e) {
