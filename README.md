@@ -40,3 +40,5 @@ General
 Clean and responsive design (works on mobile)
 Uses proper HTML structure (header, main, footer)
 Consistent colors using CSS variables
+
+Live preview: https://voranzov-music.netlify.app/
