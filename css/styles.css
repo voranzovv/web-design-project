@@ -1,6 +1,4 @@
-/* ================================
-   CSS CUSTOM VARIABLES
-   ================================ */
+/* css variables */
 :root {
   --color-bg: #0a0a0f;
   --color-bg-secondary: #111118;
@@ -20,9 +18,7 @@
   --radius-lg: 20px;
 }
 
-/* ================================
-   RESET
-   ================================ */
+/* reset  */
 *,
 *::before,
 *::after {
@@ -31,9 +27,7 @@
   padding: 0;
 }
 
-/* ================================
-   BODY
-   ================================ */
+/* body  */
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
@@ -63,9 +57,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ================================
-   FLOATING MUSIC NOTES
-   ================================ */
+/* floating music notes background layer */
 .music-notes {
   position: fixed;
   top: 0;
@@ -167,9 +159,7 @@ footer {
   z-index: 1;
 }
 
-/* ================================
-   SKIP LINK
-   ================================ */
+/* Skip link */
 .skip-link {
   position: absolute;
   top: -100px;
@@ -187,14 +177,13 @@ footer {
   top: 1rem;
 }
 
-/* ================================
-   HEADER / NAV
-   ================================ */
+/* nav bar  */
 header {
   background-color: rgba(17, 17, 24, 0.92);
   border-bottom: 1px solid var(--color-accent);
   padding: 1rem 2rem;
   box-shadow: 0 2px 20px rgba(29, 185, 84, 0.25);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
 
@@ -1117,7 +1106,7 @@ footer {
 
 .scenery {
   position: fixed;
-  inset: 0; /* shorthand for top/right/bottom/left: 0 */
+  inset: 0;
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
@@ -1135,11 +1124,7 @@ footer {
   );
 }
 
-/* ---------------------------------------------------------------
-   2. STARS
-   30 <span> elements, each randomly placed with nth-child offsets.
-   They twinkle via the `twinkle` @keyframes.
-   --------------------------------------------------------------- */
+/* Stars */
 .stars {
   position: absolute;
   inset: 0;
@@ -1343,11 +1328,11 @@ footer {
   animation-duration: 3.4s;
 }
 
-/* Twinkle: fade in → bright → fade out */
+/* Twinkle: fade in bright fade out */
 @keyframes twinkle {
   0% {
     opacity: 0;
-    transform: scale(1);
+    transform: scale(4);
   }
   40% {
     opacity: 0.9;
@@ -1363,12 +1348,8 @@ footer {
   }
 }
 
-/* ---------------------------------------------------------------
-   3. RETRO SUN
-   A circle with glowing box-shadow.
-   The horizontal stripe lines are pseudo-striped using nth-child
-   on inner <span> children — they animate via `sunPulse`.
-   --------------------------------------------------------------- */
+/* RETRO SUN */
+
 .sun {
   position: absolute;
   /* Sit at the horizon: roughly 72% down the viewport */
@@ -1456,12 +1437,7 @@ footer {
   }
 }
 
-/* ---------------------------------------------------------------
-   4. CITY SILHOUETTE
-   Pure CSS clip-path polygon — no images, no SVG.
-   The shape is a stylised skyline of buildings of varying heights.
-   It slowly drifts left via `cityDrift` to feel alive.
-   --------------------------------------------------------------- */
+/* city buildings  */
 .city-silhouette {
   position: absolute;
   bottom: 28%; /* sits right at horizon line, above the grid */
@@ -1598,12 +1574,7 @@ footer {
   }
 }
 
-/* ---------------------------------------------------------------
-   5. PERSPECTIVE GRID FLOOR
-   A flat div rotated in 3D with perspective to create the classic
-   retrowave ground plane. The grid lines scroll toward you via
-   `gridScroll` on the ::before pseudo-element background-position.
-   --------------------------------------------------------------- */
+/* Grid floor */
 .grid-floor {
   position: absolute;
   bottom: 0;
@@ -1615,37 +1586,7 @@ footer {
   overflow: hidden;
 }
 
-.grid-inner {
-  position: absolute;
-  inset: 0;
-  /* Tilt the grid away from viewer — creates ground plane illusion */
-  transform: rotateX(45deg);
-  transform-origin: top center;
-  /* Grid: vertical lines + horizontal lines using two overlaid
-     linear-gradients. backgroundSize controls grid cell size. */
-  background-image:
-    linear-gradient(rgba(29, 185, 84, 0.55) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(29, 185, 84, 0.55) 1px, transparent 1px);
-  background-size: 60px 60px;
-  background-color: transparent;
-  animation: gridScroll 1.2s linear infinite;
-}
-
-/* Move background-position downward so lines scroll toward viewer */
-@keyframes gridScroll {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 0 60px;
-  }
-}
-
-/* ---------------------------------------------------------------
-   6. HORIZON GLOW LINE
-   A thin glowing line at the exact horizon where sun/city/grid meet.
-   Pure CSS — no extra HTML needed.
-   --------------------------------------------------------------- */
+/* Horizon glow line */
 .scenery::after {
   content: "";
   position: absolute;

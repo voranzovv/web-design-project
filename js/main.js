@@ -45,10 +45,7 @@ let currentSong = songs[currentIndex];
 const audio = new Audio(currentSong.audioSrc);
 let isPlaying = false;
 
-/* --------------------------------
-   RIPPLE EFFECT HELPER
-   Spawns a CSS ripple on any button click
-   -------------------------------- */
+// ripple effect
 function spawnRipple(btn, event) {
   var ripple = document.createElement("span");
   ripple.classList.add("ripple");
@@ -71,9 +68,7 @@ function spawnRipple(btn, event) {
   }, 600);
 }
 
-/* --------------------------------
-   UPDATE UI — play/pause state
-   -------------------------------- */
+// update ui - play or pause
 function updatePlayerUI() {
   if (isPlaying) {
     audio.play();
@@ -93,9 +88,7 @@ function updatePlayerUI() {
   }
 }
 
-/* --------------------------------
-   SET SONG
-   -------------------------------- */
+// set song
 function setCurrentSong(index) {
   document.querySelectorAll(".track-row").forEach(function (row) {
     row.classList.remove("active");
@@ -128,18 +121,14 @@ function setCurrentSong(index) {
   updatePlayerUI();
 }
 
-/* --------------------------------
-   PLAY / PAUSE BUTTON
-   -------------------------------- */
+// play / pause button
 playBtn.addEventListener("click", function (e) {
   spawnRipple(playBtn, e);
   isPlaying = !isPlaying;
   updatePlayerUI();
 });
 
-/* --------------------------------
-   PROGRESS BAR — show glowing dot
-   -------------------------------- */
+// prograss bar
 audio.addEventListener("timeupdate", function () {
   if (audio.duration) {
     var percent = (audio.currentTime / audio.duration) * 100;
@@ -151,22 +140,16 @@ audio.addEventListener("timeupdate", function () {
   }
 });
 
-/* --------------------------------
-   AUTO NEXT SONG
-   -------------------------------- */
+// next song
 audio.addEventListener("ended", function () {
   var nextIndex = (currentIndex + 1) % songs.length;
   setCurrentSong(nextIndex);
 });
 
-/* --------------------------------
-   INITIAL LOAD
-   -------------------------------- */
+// set first song
 setCurrentSong(0);
 
-/* --------------------------------
-   PREV / NEXT BUTTONS + ripple
-   -------------------------------- */
+// previus and next buttons
 var prevBtn = document.querySelector('[aria-label="Previous track"]');
 var nextBtn = document.querySelector('[aria-label="Next track"]');
 
@@ -189,9 +172,7 @@ nextBtn.addEventListener("click", function (e) {
   updatePlayerUI();
 });
 
-/* --------------------------------
-   TRACK ROW CLICKS — keyboard + mouse
-   -------------------------------- */
+// keyboard mouse control
 document.querySelectorAll(".track-row").forEach(function (row, index) {
   row.setAttribute("tabindex", "0");
   row.setAttribute("role", "button");
@@ -213,9 +194,7 @@ document.querySelectorAll(".track-row").forEach(function (row, index) {
   });
 });
 
-/* --------------------------------
-   SUBSCRIBE FORM — paper airplane
-   -------------------------------- */
+// subscribe from
 function handleSubmit() {
   var submitBtn = document.getElementById("submit-btn");
   var btnLabel = submitBtn.querySelector(".btn-label");
