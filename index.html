@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voranzov Music</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header>
+      <nav aria-label="Main navigation">
+        <p class="logo">Voranzov</p>
+        <ul>
+          <li><a href="#player">Player</a></li>
+          <li><a href="#tracks">Tracks</a></li>
+          <li><a href="#subscribe">Subscribe</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <section id="player" aria-labelledby="player-heading">
+        <h1 id="player-heading">Now Playing</h1>
+        <div class="player-card">
+          <img
+            src="images/album-art.jpg"
+            alt="Album art for Azhage by Voranzov"
+            class="album-art"
+            id="album-art"
+          />
+          <div class="player-info">
+            <p class="track-title">Azhage</p>
+            <p class="track-artist">Voranzov</p>
+
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar"></div>
+            </div>
+
+            <div class="player-controls">
+              <button
+                class="ctrl-btn"
+                aria-label="Previous track"
+                type="button"
+              >
+                &#9664;&#9664;
+              </button>
+              <button
+                class="ctrl-btn play-btn"
+                id="play-btn"
+                aria-label="Play"
+                type="button"
+              >
+                &#9654;
+              </button>
+              <button class="ctrl-btn" aria-label="Next track" type="button">
+                &#9654;&#9654;
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-label="Frequency visualizer">
+        <div class="visualizer" id="visualizer" aria-hidden="true">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+      </section>
+
+      <section id="tracks" aria-labelledby="tracks-heading">
+        <h2 id="tracks-heading">Tracklist</h2>
+        <ol class="tracklist">
+          <li class="track-row">
+            <span class="track-num">01</span>
+            <img
+              src="images/album-art.jpg"
+              alt="Album art for Azhage"
+              class="track-thumb"
+            />
+            <div class="track-details">
+              <p class="track-row-title">Azhage</p>
+              <p class="track-row-artist">Voranzov</p>
+            </div>
+            <span class="track-duration">3:42</span>
+          </li>
+
+          <li class="track-row">
+            <span class="track-num">02</span>
+            <img
+              src="images/nee.jpg"
+              alt="Album art for Nee"
+              class="track-thumb"
+            />
+            <div class="track-details">
+              <p class="track-row-title">Nee</p>
+              <p class="track-row-artist">Voranzov</p>
+            </div>
+            <span class="track-duration">4:11</span>
+          </li>
+
+          <li class="track-row">
+            <span class="track-num">03</span>
+            <img
+              src="images/thuli.png"
+              alt="Album art for Thuli Thuli"
+              class="track-thumb"
+            />
+            <div class="track-details">
+              <p class="track-row-title">Thuli Thuli</p>
+              <p class="track-row-artist">Voranzov</p>
+            </div>
+            <span class="track-duration">3:58</span>
+          </li>
+
+          <li class="track-row">
+            <span class="track-num">04</span>
+            <img
+              src="images/thangame.jpeg"
+              alt="Album art for Thangame"
+              class="track-thumb"
+            />
+            <div class="track-details">
+              <p class="track-row-title">Thangame</p>
+              <p class="track-row-artist">Voranzov</p>
+            </div>
+            <span class="track-duration">5:03</span>
+          </li>
+
+          <li class="track-row">
+            <span class="track-num">05</span>
+            <img
+              src="images/ninaivugale.jpg"
+              alt="Album art for Ninaivugale"
+              class="track-thumb"
+            />
+            <div class="track-details">
+              <p class="track-row-title">Ninaivugale</p>
+              <p class="track-row-artist">Voranzov</p>
+            </div>
+            <span class="track-duration">4:27</span>
+          </li>
+        </ol>
+      </section>
+
+      <section id="subscribe" aria-labelledby="subscribe-heading">
+        <h2 id="subscribe-heading">Stay in the loop</h2>
+        <form class="subscribe-form" id="subscribe-form">
+          <p class="subscribe-desc">
+            Get notified when new tracks drop. No spam, just music.
+          </p>
+
+          <div class="form-row">
+            <label for="email" class="sr-only">Email address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="your@email.com"
+              required
+            />
+            <button class="submit-btn" id="submit-btn" type="submit">
+              <span class="btn-label">Subscribe</span>
+              <span class="btn-plane" aria-hidden="true">&#9993;</span>
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Synthwave Listening Room</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
